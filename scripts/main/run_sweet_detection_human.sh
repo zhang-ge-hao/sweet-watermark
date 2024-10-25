@@ -6,23 +6,29 @@ max_len=512
 batch_size=20
 top_p=0.95
 n_sample=40
+model=bigcode/starcoder
+outputs_dir=outputs_human
+gamma=0.25
+delta=3.0
+entropy_threshold=1.2
+batch_size=50
 
-# for mbpp
-task="mbpp"
-max_len=2048
-batch_size=5
-top_p=0.95
-n_sample=20
+# # for mbpp
+# task="mbpp"
+# max_len=2048
+# batch_size=5
+# top_p=0.95
+# n_sample=20
 
-# for ds1000
-task="ds1000-all-completion"
-max_len=1024
-batch_size=10
-top_p=0.5
-n_sample=40
+# # for ds1000
+# task="ds1000-all-completion"
+# max_len=1024
+# batch_size=10
+# top_p=0.5
+# n_sample=40
 
-accelerate launch main.py \
-    --model bigcode/starcoder \
+python main.py \
+    --model $model \
     --use_auth_token \
     --task $task \
     --temperature 0.2 \
@@ -34,8 +40,9 @@ accelerate launch main.py \
     --n_samples $n_sample \
     --max_length_generation $max_len \
     --detect_human_code \
-    --outputs_dir OUTPUT_DIRECTORY_HUMAN \
+    --outputs_dir $outputs_dir \
     --sweet \
-    --gamma GAMMA \
-    --delta DELTA \
-    --entropy_threshold ENTROPY_THRESHOLD
+    --gamma $gamma \
+    --delta $delta \
+    --entropy_threshold $entropy_threshold \
+    --batch_size $batch_size
